@@ -28,7 +28,7 @@ def getTxMsg(payload):
 
 def relayTx(tx,node): 
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	socket.timeout = 2
+	socket.timeout = 1
 	
 	#print node
 	
