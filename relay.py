@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+#
+# Author Dario Clavijo 2015
+# GPLv3
+
 import hashlib,utils,socket,random,struct
 import time
 
