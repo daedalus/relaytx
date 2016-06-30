@@ -33,15 +33,19 @@ def getTxMsg(payload):
 
 def relayTx(tx,node): 
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	socket.timeout = 1
-	
-	#print node
-	
-	sock.connect(node)
- 
-	sock.send(getVersionMsg())
-	#print sock.recv(1000) # receive version
-	#print sock.recv(1000) # receive verack
-	sock.send(getTxMsg(tx.decode('hex')))
-	print "Sent to ", node	
-	sock.close
+	try:	
+		sock.connect(node)
+		sock.settimeout(1)
+		#sock.create_connection(node,10)
+		print "connected..." 
+		sock.send(getVersionMsg())
+		print sock.recv(1000) # receive version
+		print sock.recv(1000) # receive verack
+		sock.send(getTxMsg(tx.decode('hex')))
+		print sock.recv(1000) # receive version
+        	print sock.recv(1000) # receive verack
+		#print "Sent to ", node	
+		sock.close
+	except:
+		print "Socket Exception"
+

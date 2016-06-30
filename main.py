@@ -5,33 +5,25 @@
 
 import relay
 import sys
+import random
+import dns_resolver
+import fileinput
 
 nodes = []
 
 
-tx = None
-node = None
-
-if len(sys.argv)>0:
-	tx = sys.argv[1]
-#if len(sys.argv)>1:
-#	node = (sys.argv[2],8333)
-
-if node:
-	try:
-		print relay.relayTx(tx,node)
-	except:
-		print "Error",node
-else:
-	fp = open('nodes.txt')
-
-	for line in fp:
-		line = line.rstrip()
-		tokens = line.split()
-		nodes.append((tokens[0],int(tokens[1])))
-
+def broadcast(tx):
+	nodes = dns_resolver.nslookup('bitseed.xf2.org')
 	for node in nodes:
-		try:
-			print relay.relayTx(tx,node)
-		except:
-			print "Error",node
+        	print "Sending TX: %s to node: %s" % (tx,node)
+		relay.relayTx(tx,(node,8333))
+
+def main():
+	if len(sys.argv)>1:
+		tx = sys.argv[1]
+		broadcast(tx)
+	else:
+		for line in fileinput.input():
+			broadcast(line.replace('\n',''))
+
+main()
