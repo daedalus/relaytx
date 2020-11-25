@@ -15,15 +15,18 @@ def varint(n):
     else:
         return struct.pack('<cQ', '\xff', n)
 
+
 # Takes and returns byte string value, not hex string
 def varstr(s):
     return varint(len(s)) + s
+
 
 # 60002
 def netaddr(ipaddr, port):
     services = 1
     return (struct.pack('<Q12s', services, '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff') +
                        struct.pack('>4sH', ipaddr, port))
+
 # return value, len
 def processVarInt(payload):
     n0 = ord(payload[0])
@@ -36,10 +39,12 @@ def processVarInt(payload):
     else:
         return [struct.unpack('<Q', payload[1:5])[0], 7]
 
+
 # return value, len
 def processVarStr(payload):
     n, length = processVarInt(payload)
     return [payload[length:length+n], length + n]
+
 
 # takes 26 byte input, returns string  
 def processAddr(payload):
@@ -56,11 +61,13 @@ def base58encode(n):
         n /= 58
     return result
 
+
 def base58decode(s):
     result = 0
     for i in range(0, len(s)):
         result = result * 58 + b58.index(s[i])
     return result
+
 
 def base256encode(n):
     result = ''
@@ -69,11 +76,13 @@ def base256encode(n):
         n /= 256
     return result
 
+
 def base256decode(s):
     result = 0
     for c in s:
         result = result * 256 + ord(c)
     return result
+
 
 def countLeadingChars(s, ch):
     count = 0
@@ -84,6 +93,7 @@ def countLeadingChars(s, ch):
             break
     return count
 
+
 # https://en.bitcoin.it/wiki/Base58Check_encoding
 def base58CheckEncode(version, payload):
     s = chr(version) + payload
@@ -91,6 +101,7 @@ def base58CheckEncode(version, payload):
     result = s + checksum
     leadingZeros = countLeadingChars(result, '\0')
     return '1' * leadingZeros + base58encode(base256decode(result))
+
 
 def base58CheckDecode(s):
     leadingOnes = countLeadingChars(s, '1')
@@ -101,6 +112,7 @@ def base58CheckDecode(s):
     assert(chk == checksum)
     version = result[0]
     return result[1:]
+
 
 if __name__ == '__main__':
     unittest.main()
