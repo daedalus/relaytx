@@ -39,59 +39,59 @@ def getTxMsg(payload):
     return makeMessage(magic, 'tx', payload)
 
 
-def disect_ping(p, length):
-    nonce = p[0:0 + 8].encode('hex')
+def disect_ping(payload, length):
+    nonce = payload[0:0 + 8].encode('hex')
     return [nonce]
 
 
-def disect_pong(p, length):
-    nonce = p[0:0 + 8].encode('hex')
+def disect_pong(payload, length):
+    nonce = payload[0:0 + 8].encode('hex')
     return [nonce]
 
 
-def disect_reject(p, length):
-    msg = p[:length]
+def disect_reject(payload, length):
+    msg = payload[:length]
     return msg
 
 
 # FIXME
-def disect_inv(p, length):
-    return p.encode('hex')
+def disect_inv(payload, length):
+    return payload.encode('hex')
 
 
 # FIXME
-def disect_verack(p, length):
-    return p.encode('hex')
+def disect_verack(payload, length):
+    return payload.encode('hex')
 
 
-def disect_inventory_item(p):
-    type = p[0:0 + 4].encode('hex')
-    hash = p[4:4 + 32].encode('hex')
+def disect_inventory_item(payload):
+    type = payload[0:0 + 4].encode('hex')
+    hash = payload[4:4 + 32].encode('hex')
     return[type,hash]
 
 
-def disect_netaddress(p):
-    time     = p[0:0:4].encode('hex')
-    services = p[4:4 + 8].encode('hex')
-    ipv64    = p[12:12 + 16].encode('hex')
-    port     = p[16:16 + 2].encode('hex')
+def disect_netaddress(payload):
+    time     = payload[0:0:4].encode('hex')
+    services = payload[4:4 + 8].encode('hex')
+    ipv64    = payload[12:12 + 16].encode('hex')
+    port     = payload[16:16 + 2].encode('hex')
     return [time,services,ipv64,port]
 
 
-def disect_version(p, l):
-    version    = p[0:0 + 4].encode('hex')	
-    services   = p[4:4 + 8].encode('hex')
-    timestamp  = p[12:12 + 8].encode('hex')
-    addr_recv  = disect_netaddress(p[20:20 + 26].encode('hex'))
-    addr_from  = disect_netaddress(p[26:26 + 26].encode('hex'))
-    nonce      = p[20:20 + 26].encode('hex')
-    user_agent = repr(p[:46])
+def disect_version(payload, length):
+    version    = payload[0:0 + 4].encode('hex')	
+    services   = payload[4:4 + 8].encode('hex')
+    timestamp  = payload[12:12 + 8].encode('hex')
+    addr_recv  = disect_netaddress(payload[20:20 + 26].encode('hex'))
+    addr_from  = disect_netaddress(payload[26:26 + 26].encode('hex'))
+    nonce      = payload[20:20 + 26].encode('hex')
+    user_agent = repr(payload[:46])
     return [version, services, timestamp, addr_recv, addr_from, nonce, user_agent]
 
 
 # FIXME
 def disect_getheaders(payload, length):
-    return p.encode('hex')
+    return payload.encode('hex')
 
 
 def disect_msg(r):	

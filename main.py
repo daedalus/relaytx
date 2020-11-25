@@ -44,10 +44,13 @@ def loadnodes():
     # nodes = dns_resolver.nslookup('bitseed.xf2.org')
     nodes = []
     c = 0
-    fp = open('/tmp/nodes.txt')
-    for node in fp:
-        nodes = addnode(nodes, node)
-    fp.close()
+    try:
+        fp = open('/tmp/nodes.txt')
+        for node in fp:
+            nodes = addnode(nodes, node)
+        fp.close()
+    except:
+        pass
     return nodes
 
 
