@@ -96,9 +96,9 @@ def disect_msg(r):
         command = s[1].replace('\0','')
         checksum = s[3].encode('hex')
         payload = s[4][:length]
-	if command == 'version':
+        if command == 'version':
             decoded = disect_version(payload,length)
-	elif command == 'inv':
+        elif command == 'inv':
             decoded = disect_inv(payload,length)
         elif command == 'reject':
             decoded = disect_reject(payload,length)
@@ -113,7 +113,7 @@ def disect_msg(r):
             decoded = disect_ping(payload,length)
         else:
             decoded = repr(payload)
-	print (command, length, decoded)
+        print(command, length, decoded)
 
 
 def relayTx(tx, node): 
