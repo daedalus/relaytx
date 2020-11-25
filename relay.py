@@ -39,26 +39,28 @@ def getTxMsg(payload):
     return makeMessage(magic, 'tx', payload)
 
 
-def disect_ping(p,length):
+def disect_ping(p, length):
     nonce = p[0:0 + 8].encode('hex')
     return [nonce]
 
 
-def disect_pong(p,length):
+def disect_pong(p, length):
     nonce = p[0:0 + 8].encode('hex')
     return [nonce]
 
 
-def disect_reject(p,length):
+def disect_reject(p, length):
     msg = p[:length]
     return msg
 
 
-def disect_inv(p,length):
+# FIXME
+def disect_inv(p, length):
     return p.encode('hex')
 
 
-def disect_verack(p,length):
+# FIXME
+def disect_verack(p, length):
     return p.encode('hex')
 
 
@@ -76,7 +78,7 @@ def disect_netaddress(p):
     return [time,services,ipv64,port]
 
 
-def disect_version(p,l):
+def disect_version(p, l):
     version    = p[0:0 + 4].encode('hex')	
     services   = p[4:4 + 8].encode('hex')
     timestamp  = p[12:12 + 8].encode('hex')
@@ -85,6 +87,11 @@ def disect_version(p,l):
     nonce      = p[20:20 + 26].encode('hex')
     user_agent = repr(p[:46])
     return [version, services, timestamp, addr_recv, addr_from, nonce, user_agent]
+
+
+# FIXME
+def disect_getheaders(payload, length):
+    return p.encode('hex')
 
 
 def disect_msg(r):	
