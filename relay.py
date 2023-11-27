@@ -15,7 +15,7 @@ socket.timeout(5)
 magic = 0xd9b4bef9
  
 def makeMessage(magic, command, payload):
-    checksum = hashlib.sha256(hashlib.sha256(payload).digest()).digest()[0:4]
+    checksum = hashlib.sha256(hashlib.sha256(payload).digest()).digest()[:4]
     return struct.pack('<L12sL4s', magic, command, len(payload), checksum) + payload
 
 
@@ -40,18 +40,17 @@ def getTxMsg(payload):
 
 
 def disect_ping(payload, length):
-    nonce = payload[0:0 + 8].encode('hex')
+    nonce = payload[:0 + 8].encode('hex')
     return [nonce]
 
 
 def disect_pong(payload, length):
-    nonce = payload[0:0 + 8].encode('hex')
+    nonce = payload[:0 + 8].encode('hex')
     return [nonce]
 
 
 def disect_reject(payload, length):
-    msg = payload[:length]
-    return msg
+    return payload[:length]
 
 
 # FIXME
@@ -65,13 +64,13 @@ def disect_verack(payload, length):
 
 
 def disect_inventory_item(payload):
-    type = payload[0:0 + 4].encode('hex')
+    type = payload[:0 + 4].encode('hex')
     hash = payload[4:4 + 32].encode('hex')
     return[type,hash]
 
 
 def disect_netaddress(payload):
-    time     = payload[0:0:4].encode('hex')
+    time = payload[:0:4].encode('hex')
     services = payload[4:4 + 8].encode('hex')
     ipv64    = payload[12:12 + 16].encode('hex')
     port     = payload[16:16 + 2].encode('hex')
@@ -79,7 +78,7 @@ def disect_netaddress(payload):
 
 
 def disect_version(payload, length):
-    version    = payload[0:0 + 4].encode('hex')	
+    version = payload[:0 + 4].encode('hex')
     services   = payload[4:4 + 8].encode('hex')
     timestamp  = payload[12:12 + 8].encode('hex')
     addr_recv  = disect_netaddress(payload[20:20 + 26].encode('hex'))
@@ -97,7 +96,7 @@ def disect_getheaders(payload, length):
 def disect_msg(r):	
     # decode message fields
     # maybe this can be done with a struct.unpack
-    s = [r[0:4], r[4:4 + 12], r[16:16 + 4], r[20:20 + 4], r[24:]]
+    s = [r[:4], r[4:4 + 12], r[16:16 + 4], r[20:20 + 4], r[24:]]
     if s[0].encode('hex') == 'f9beb4d9':
         length = struct.unpack("<I", s[2])[0]
         command = s[1].replace('\0','')
