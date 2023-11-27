@@ -45,10 +45,9 @@ def loadnodes():
     nodes = []
     c = 0
     try:
-        fp = open('/tmp/nodes.txt')
-        for node in fp:
-            nodes = addnode(nodes, node)
-        fp.close()
+        with open('/tmp/nodes.txt') as fp:
+            for node in fp:
+                nodes = addnode(nodes, node)
     except:
         pass
     return nodes
@@ -68,7 +67,7 @@ def addnodes(nodes):
 
 def prepare(nodes):
     random.shuffle(nodes)
-    nodes = nodes[0:limit]
+    nodes = nodes[:limit]
     nodes = addnodes(nodes)
     nodes = nodes[::-1]
     return nodes
@@ -87,9 +86,9 @@ def main():
         nodes = loadnodes()
         nodes = prepare(nodes)
         print(nodes)
-        for i in range(0, 4):
+        for _ in range(0, 4):
             # print(tx)
-            newthread(target = broadcast, args = (nodes, tx, ))	
+            newthread(target = broadcast, args = (nodes, tx, ))
             random.shuffle(nodes)
 
 
